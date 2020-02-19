@@ -7,7 +7,12 @@ from goose3 import Goose
 import csv
 import time
 
-keyword = parse.quote('"NPC International Inc"'.encode('utf8'))
+comp = "NPC International Inc"
+keywords = comp.split(' ')[0:-1]
+kws = ''
+for kw in keywords:
+    kws += ' ' + kw
+keyword = parse.quote(comp.encode('utf8'))
 num = 10
 url = "https://news.google.com/rss/search?q=" + \
     keyword + "&hl = en-US & gl = US & ceid = US: en"
@@ -45,6 +50,18 @@ if res.status_code == 200:
         g = Goose()
         article = g.extract(raw_html=page)
         text = article.cleaned_text
+
+        if kws not in text:
+            found = False
+            for content in contents:
+                if kws in content.text:
+                    if found == False:
+                        text = content.text
+                        found = True
+                    else:
+                        text += '\n' + content.text
+            if found == False:
+                continue
         cnt += 1
         browser.close()
         news_list.append({
