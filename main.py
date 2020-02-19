@@ -10,15 +10,16 @@ import time
 domain = "https://www.bloomberg.com"
 jp_lang = "&hl=ja&gl=JP&ceid=JP:ja"
 en_lang = "&hl=en-US&gl=US&ceid=US:en"
-comp = "NPC International Inc "
+comp = "NPC International Inc"
 keywords = comp.split(' ')[0:-1]
 kws = ''
 for kw in keywords:
     kws += ' ' + kw
-keyword = parse.quote((comp).encode('utf8'))
+keyword = parse.quote(comp.encode('utf8'))
+domain = parse.quote((" inurl:"+domain).encode('utf8'))
 num = 10
-url = "https://news.google.com/rss/search?q=" + \
-    keyword + "inurl:" + domain + en_lang
+url = 'https://news.google.com/rss/search?q="' + \
+    keyword + '"' + domain + en_lang
 res = requests.get(url)
 news_list = []
 
@@ -46,7 +47,7 @@ if res.status_code == 200:
         browser.execute_cdp_cmd(
             "Page.addScriptToEvaluateOnNewDocument", {"source": script})
         browser.get(link)
-        time.sleep(1)
+        time.sleep(3)
         page = browser.page_source
         s2 = BeautifulSoup(page, 'lxml')
         contents = s2.body.find_all('p')
