@@ -1,7 +1,6 @@
 import requests
 from bs4 import BeautifulSoup
 from urllib import parse
-from fake_useragent import UserAgent
 from selenium import webdriver
 from goose3 import Goose
 import csv
